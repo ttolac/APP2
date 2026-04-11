@@ -10,14 +10,14 @@ def cout_mise(prix, cout_base, alpha):
 class Manche:
     """classe pour une manche"""
 
-    def __init__(self, cout_base: float = 1.0, alpha: float = 5.0):
+    def __init__(self, cout_base = 1.0, alpha =5.0):
         self.cout_base = cout_base
         self.alpha = alpha
         self.abr = ABR()
         self.mises: list[tuple[str, int]] = []   # [(joueur, prix), ...]
 
 
-    def charger_csv(self, chemin: str) -> None:
+    def charger_csv(self, chemin):
         """charger si on a un fichier csv correct (jouerr prix)"""
         if not os.path.exists(chemin):
             raise FileNotFoundError(f"Fichier introuvable : {chemin}")

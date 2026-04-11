@@ -1,22 +1,9 @@
-"""
-simulation.py — Moteur de simulation multi-manches LowBid
-
-Lance N manches avec des joueurs IA (chacun ayant une stratégie).
-Collecte et affiche les statistiques comparatives.
-"""
-
 import random
 from enchere import Manche, cout_mise
-from strategies import strategies
-
-
-# ------------------------------------------------------------------ #
-#  JOUEUR IA                                                           #
-# ------------------------------------------------------------------ #
+from strats import strategies
 
 class JoueurIA:
-    def __init__(self, nom: str, strategie_nom: str,
-                 cout_base: float, alpha: float):
+    def __init__(self, nom, strategie_nom,cout_base, alpha):
         if strategie_nom not in strategies:
             raise ValueError(f"Stratégie inconnue : {strategie_nom}")
         self.nom = nom
@@ -31,7 +18,7 @@ class JoueurIA:
         self.couts_totaux = 0.0    # somme de tous les coûts payés
         self.historique_gagnants: list[int] = []
 
-    def choisir_prix(self, prix_max: int) -> int:
+    def choisir_prix(self, prix_max):
         """Appelle la stratégie pour obtenir le prix de la mise."""
         fn = self._strategie
         # strategie_calculee accepte cout_base et alpha
@@ -40,8 +27,7 @@ class JoueurIA:
                       self.cout_base, self.alpha)
         return fn(prix_max, self.historique_gagnants)
 
-    def enregistrer_manche(self, a_gagne: bool, prix_mise: int,
-                            prix_gagnant_manche) -> None:
+    def enregistrer_manche(self, a_gagne, prix_mise,prix_gagnant_manche):
         self.total_manches += 1
         cout = cout_mise(prix_mise, self.cout_base, self.alpha)
         self.couts_totaux += cout
@@ -50,15 +36,8 @@ class JoueurIA:
         if prix_gagnant_manche is not None:
             self.historique_gagnants.append(prix_gagnant_manche)
 
-
-# ------------------------------------------------------------------ #
-#  SIMULATION                                                          #
-# ------------------------------------------------------------------ #
-
 class Simulation:
-    def __init__(self, nb_manches: int = 500, prix_max: int = 20,
-                 cout_base: float = 1.0, alpha: float = 5.0,
-                 valeur_objet: float = 100.0):
+    def __init__(self, nb_manches =500, prix_max= 20, cout_base= 1.0, alpha= 5.0,valeur_objet= 100.0):
         self.nb_manches = nb_manches
         self.prix_max = prix_max
         self.cout_base = cout_base
@@ -68,12 +47,12 @@ class Simulation:
         self.recettes_vendeur: list[float] = []
         self.nb_manches_sans_gagnant = 0
 
-    def ajouter_joueur(self, nom: str, strategie_nom: str) -> None:
+    def ajouter_joueur(self, nom, strategie_nom):
         self.joueurs.append(
             JoueurIA(nom, strategie_nom, self.cout_base, self.alpha)
         )
 
-    def lancer(self) -> None:
+    def lancer(self):
         """Lance toutes les manches."""
         if not self.joueurs:
             print("Aucun joueur enregistré.")
@@ -82,7 +61,7 @@ class Simulation:
         for i in range(self.nb_manches):
             self._jouer_une_manche()
 
-    def _jouer_une_manche(self) -> None:
+    def _jouer_une_manche(self):
         manche = Manche(self.cout_base, self.alpha)
 
         # Chaque joueur fait une mise
@@ -110,11 +89,8 @@ class Simulation:
             joueur.enregistrer_manche(a_gagne, prix_choisis[joueur.nom],
                                       prix_gagnant)
 
-    # ------------------------------------------------------------------ #
-    #  AFFICHAGE DES RÉSULTATS                                            #
-    # ------------------------------------------------------------------ #
 
-    def afficher_resultats(self) -> None:
+    def afficher_resultats(self) :
         print("\n" + "=" * 60)
         print(f"  RÉSULTATS DE LA SIMULATION ({self.nb_manches} manches)")
         print("=" * 60)
@@ -140,7 +116,7 @@ class Simulation:
         print()
         self._afficher_analyse_parametres()
 
-    def _afficher_analyse_parametres(self) -> None:
+    def _afficher_analyse_parametres(self):
         """Analyse de l'effet des paramètres et des limites de l'ABR."""
         print("  ── Analyse économique ──")
         recette_moy = sum(self.recettes_vendeur) / len(self.recettes_vendeur)
@@ -169,8 +145,7 @@ class Simulation:
         print("  • Alternative 3 : tas min (heap) → O(log n) insertion,")
         print("    O(n) pour trouver le minimum unique.")
 
-    def comparer_strategies(self, nb_manches_test: int = 500,
-                             alpha_values: list[float] = None) -> None:
+    def comparer_strategies(self, nb_manches_test= 500,alpha_values= None):
         """
         Compare les stratégies sur plusieurs valeurs d'alpha.
         Affiche l'impact du paramètre alpha sur les taux de victoire.

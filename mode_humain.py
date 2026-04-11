@@ -1,5 +1,5 @@
 from enchere import Manche, cout_mise
-from strategies import strategies, strategie_aleatoire, strategie_prudente,strategie_adaptative, strategie_calculee
+from strats import strategies, strategie_aleatoire, strategie_prudente,strategie_adaptative, strategie_calculee
 
 bots = [
     ("Bot_Aleatoire", "Aleatoire"),
@@ -11,11 +11,11 @@ bots = [
 
 def jouer_mode_humain(nb_manches=5, prix_max=20, cout_base=1.0, alpha=5.0, nom_humain = "Humain"):
     """mode ordi vs humain"""
-    print("\n" )
+    print("\n" +"-"*35)
     print("LOWBID - Mode Humain vs Ordinateur")
     print(f"Règles : proposez le PLUS BAS PRIX UNIQUE pour gagner!")
     print(f"Prix entier E [0, {prix_max}]")
-    print(f"Coût d'une mise : {cout_base:.1f} + {alpha:.1f}/(prix+1) €")
+    print(f"Coût d'une mise : {cout_base:.1f} + {alpha:.1f}/(prix+1) e")
     print()
 
 
@@ -26,8 +26,7 @@ def jouer_mode_humain(nb_manches=5, prix_max=20, cout_base=1.0, alpha=5.0, nom_h
     historique_gagnants: list[int] = []
 
     #stats bots
-    stats_bots = {nom: {"victoires": 0, "cout": 0.0}
-                  for nom, _ in bots}
+    stats_bots = {nom: {"victoires": 0, "cout": 0.0} for nom, _ in bots}
 
     for manche_num in range(1, nb_manches + 1):
         print(f"{'-'*50}")
@@ -117,8 +116,7 @@ def conseil_strategie(prix_humain, prix_gagnant,historique,cout_base, alpha):
         print(f"Prix gagnant moyen (5 dernières manches) : {moy:.1f}")
         cout_0 = cout_mise(0, cout_base, alpha)
         cout_moy = cout_mise(int(moy), cout_base, alpha)
-        print(f"Coût mise sur 0 : {cout_0:.2f} e / "
-              f"Coût mise sur ~{int(moy)} : {cout_moy:.2f} e")
+        print(f"Coût mise sur 0 : {cout_0:.2f} e / Coût mise sur ~{int(moy)} : {cout_moy:.2f} e")
         if prix_humain < moy / 2:
             print(" -> Vous jouez très bas : risque de collision ET coût élevé")
         elif prix_humain > moy * 2:
@@ -132,12 +130,11 @@ def conseil_strategie(prix_humain, prix_gagnant,historique,cout_base, alpha):
 def afficher_resume_humain(nom, victoires, cout_total,nb_manches, stats_bots):
     print("\n" + "-" * 60)
     print("  RÉSUMÉ FINAL")
-    print(f"{nom} : {victoires}/{nb_manches} manches gagnées "
-          f"({100*victoires/nb_manches:.1f}%) / Coût total : {cout_total:.2f} €")
+    print(f"{nom} : {victoires}/{nb_manches} manches gagnées ({100*victoires/nb_manches:.1f}%) / Coût total : {cout_total:.2f} e")
     print()
     print(f"  {'Bot':>15} | {'Victoires':>9} | {'Coût total':>10}")
     for nom_bot, s in stats_bots.items():
-        print(f"  {nom_bot:>15} | {s['victoires']:>9} | {s['cout']:>10.2f} €")
+        print(f"  {nom_bot:>15} | {s['victoires']:>9} | {s['cout']:>10.2f} e")
 
     print()
     print("Réflexion sur la stratégie gagnante")

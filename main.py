@@ -126,8 +126,7 @@ def analyser_manche(manche):
 
 def lancer_simulation():
     """choix du menu =3"""
-    sim = Simulation(nb_manches=500, prix_max=prix_max_defaut,
-                     cout_defaut=cout_defaut, alpha=alpha)
+    sim = Simulation(500, prix_max_defaut,cout_defaut, alpha)
     sim.ajouter_joueur("Alice", "Aleatoire")
     sim.ajouter_joueur("Bob", "Prudente")
     sim.ajouter_joueur("Charlie", "Adaptative")
@@ -141,14 +140,14 @@ def lancer_simulation():
 
 def comparer_alpha():
     """choix du menu =4"""
-    sim = Simulation(nb_manches=500, prix_max=prix_max_defaut,cout_defaut=cout_defaut, alpha=alpha)
+    sim = Simulation(500, prix_max_defaut,cout_defaut,alpha)
     sim.ajouter_joueur("Alice","Aleatoire")
     sim.ajouter_joueur("Bob", "Prudente")
     sim.ajouter_joueur("Charlie", "Adaptative")
     sim.ajouter_joueur("Diana", "Agressive")
     sim.ajouter_joueur("Eve", "Calculee")
 
-    sim.comparer_strategies(nb_manches_test=500, alpha_values=[0.5, 5.0, 20.0])
+    sim.comparer_strategies(500,[0.5, 5.0, 20.0])
 
 
 #boucle

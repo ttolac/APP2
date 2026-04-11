@@ -4,11 +4,11 @@ from simulation import Simulation
 from mode_humain import jouer_mode_humain
 
 #defaut
-COUT_BASE = 1.0
-ALPHA = 5.0
-PRIX_MAX = 20
+cout_defaut = 1.0
+alpha = 5.0
+prix_max_defaut = 20
 
-FICHIERS_CSV = {
+fichiers_csv = {
     "1": {
         "chemin": "APP_lowbid_data/lowbid_manche_demo.csv",
         "label":  "Manche démo (30 mises, 1 manche, prix max 49)",
@@ -35,7 +35,7 @@ def menu():
     print()
     print("LOWBID - Qui perd gagne !")
     print()
-    print(f"Paramètres : cout_base={COUT_BASE}, α={ALPHA}, prix_max={PRIX_MAX}")
+    print(f"Paramètres : cout_defaut={cout_defaut}, α={alpha}, prix_max={prix_max_defaut}")
     print()
     print("1. Charger et analyser un fichier CSV")
     print("2. Générer des données démo et analyser")
@@ -49,17 +49,17 @@ def choisir_fichier():
     """demande a l'utilisateur de choisir un parmis les 3 fichiers"""
     print("\nChoisissez un fichier CSV :")
     print()
-    for k, v in FICHIERS_CSV.items():
+    for k, v in fichiers_csv.items():
         print(f"{k}. {v['label']}")
     print("0. Fichier personnalisé (saisie manuelle)")
     choix = input("Votre choix : ").strip()
 
-    if choix in FICHIERS_CSV:
-        return FICHIERS_CSV[choix]
+    if choix in fichiers_csv:
+        return fichiers_csv[choix]
     elif choix == "0":
         chemin = input("Chemin du fichier : ").strip()
         fmt = input("Format ? [simple=joueur,prix | multi=manche,joueur,prix] :").strip()
-        return {"chemin": chemin, "format": fmt or "simple", "prix_max_suggestion": PRIX_MAX}
+        return {"chemin": chemin, "format": fmt or "simple", "prix_max_suggestion": prix_max_defaut}
     else:
         print("Choix invalide, sortie")
         return None
@@ -71,7 +71,7 @@ def demo_fichier_csv():
     if cfg is None:
         return
 
-    manche = Manche(COUT_BASE, ALPHA)
+    manche = Manche(cout_defaut, alpha)
 
     if cfg["format"] == "multi":
         #demander quelle manche on veut analyser
@@ -91,8 +91,8 @@ def demo_fichier_csv():
 def demo_generation():
     """choix du menu =2"""
     print("\nGénération d'un jeu de données démo...")
-    manche = Manche(COUT_BASE, ALPHA)
-    manche.generer_demo(nb_joueurs=12, prix_max=PRIX_MAX, nb_mises_par_joueur=2)
+    manche = Manche(cout_defaut, alpha)
+    manche.generer_demo(nb_joueurs=12, prix_max=prix_max_defaut, nb_mises_par_joueur=2)
     print(f"Succès! {manche.abr.nombre_total_mises()} mises générées")
     analyser_manche(manche)
 
@@ -126,8 +126,8 @@ def analyser_manche(manche):
 
 def lancer_simulation():
     """choix du menu =3"""
-    sim = Simulation(nb_manches=500, prix_max=PRIX_MAX,
-                     cout_base=COUT_BASE, alpha=ALPHA)
+    sim = Simulation(nb_manches=500, prix_max=prix_max_defaut,
+                     cout_defaut=cout_defaut, alpha=alpha)
     sim.ajouter_joueur("Alice", "Aleatoire")
     sim.ajouter_joueur("Bob", "Prudente")
     sim.ajouter_joueur("Charlie", "Adaptative")
@@ -141,8 +141,7 @@ def lancer_simulation():
 
 def comparer_alpha():
     """choix du menu =4"""
-    sim = Simulation(nb_manches=500, prix_max=PRIX_MAX,
-                     cout_base=COUT_BASE, alpha=ALPHA)
+    sim = Simulation(nb_manches=500, prix_max=prix_max_defaut,cout_defaut=cout_defaut, alpha=alpha)
     sim.ajouter_joueur("Alice","Aleatoire")
     sim.ajouter_joueur("Bob", "Prudente")
     sim.ajouter_joueur("Charlie", "Adaptative")
@@ -166,9 +165,13 @@ def main():
         elif choix == "4":
             comparer_alpha()
         elif choix == "5":
+            #demander le nom
+            nom_humain = input("Votre nom : ").strip() or "Humain"
             nb = int(input("Nombre de manches [5 par défaut] : ").strip() or "5")
-            jouer_mode_humain(nb_manches=nb, prix_max=PRIX_MAX,
-                              cout_base=COUT_BASE, alpha=ALPHA)
+            prix_max = int(input("Prix maximum autorisé [20 par défaut] : ").strip() or "20")
+            cout= float(input("Cout de base (cout minimum payé dans tous les cas [1 par défaut] : ").strip() or "1")
+            alpha = float(input("Valeur de alpha [5 par défaut] : ").strip() or "5")
+            jouer_mode_humain(nb, prix_max, cout, alpha, nom_humain)
         elif choix == "0":
             print("\nAu revoir !\n")
             break

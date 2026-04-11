@@ -100,7 +100,7 @@ def strategie_calculee(prix_max: int, historique: list[int],
 #  REGISTRE DES STRATÉGIES                                            #
 # ------------------------------------------------------------------ #
 
-STRATEGIES = {
+strategies = {
     "Aleatoire":   strategie_aleatoire,
     "Prudente":    strategie_prudente,
     "Adaptative":  strategie_adaptative,

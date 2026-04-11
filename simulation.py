@@ -7,7 +7,7 @@ Collecte et affiche les statistiques comparatives.
 
 import random
 from enchere import Manche, cout_mise
-from strategies import STRATEGIES
+from strategies import strategies
 
 
 # ------------------------------------------------------------------ #
@@ -17,11 +17,11 @@ from strategies import STRATEGIES
 class JoueurIA:
     def __init__(self, nom: str, strategie_nom: str,
                  cout_base: float, alpha: float):
-        if strategie_nom not in STRATEGIES:
+        if strategie_nom not in strategies:
             raise ValueError(f"Stratégie inconnue : {strategie_nom}")
         self.nom = nom
         self.strategie_nom = strategie_nom
-        self._strategie = STRATEGIES[strategie_nom]
+        self._strategie = strategies[strategie_nom]
         self.cout_base = cout_base
         self.alpha = alpha
         # Stats cumulées

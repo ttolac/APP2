@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import sys, os
- 
-#sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from enchere import Manche
 from simulation import Simulation
 
@@ -13,7 +11,7 @@ class LowBidApp(tk.Tk):
         self.configure(bg="#f5f4f0")
         self.geometry("880x660")
  
-        # En-tête
+        #entete
         hdr = tk.Frame(self, bg="#1a3a5c", pady=14)
         hdr.pack(fill="x")
         tk.Label(hdr, text="⚖  LOWBID", font=("Georgia", 20, "bold"), fg="#c9a84c",
@@ -21,14 +19,13 @@ class LowBidApp(tk.Tk):
         tk.Label(hdr, text="Qui perd gagne !", font=("Georgia", 11, "italic"),
                  fg="#aabbcc", bg="#1a3a5c").pack(side="left")
  
-        # Corps
+        #corps
         body = tk.Frame(self, bg="#f5f4f0")
         body.pack(fill="both", expand=True, padx=16, pady=12)
         body.columnconfigure(0, weight=1)
         body.columnconfigure(1, weight=2)
         body.rowconfigure(0, weight=1)
  
-        # ── Panneau gauche ──────────────────────────────────────────
         left = tk.Frame(body, bg="#ffffff", padx=14, pady=14,
                         relief="flat", bd=1)
         left.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
@@ -40,7 +37,7 @@ class LowBidApp(tk.Tk):
             tk.Label(left, text=text, font=("Courier New", 10), fg=fg,
                      bg="#ffffff").pack(anchor="w", pady=(6, 0))
  
-        tk.Label(left, text="PARAMÈTRES", font=("Georgia", 11, "bold"),
+        tk.Label(left, text="PARAMETRES", font=("Georgia", 11, "bold"),
                  fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
         sep()
  
@@ -63,7 +60,7 @@ class LowBidApp(tk.Tk):
                            bg="#ffffff", fg="#1a1a1a", font=("Courier New", 10),
                            activebackground="#ffffff").pack(side="left", padx=4)
  
-        lbl("N° manche (si multi)")
+        lbl("Num manche (si multi)")
         self.var_manche = tk.StringVar(value="1")
         tk.Entry(left, textvariable=self.var_manche, font=("Courier New", 10),
                  relief="solid", bd=1, width=6).pack(anchor="w", pady=(2, 6))
@@ -71,7 +68,6 @@ class LowBidApp(tk.Tk):
         sep()
         tk.Label(left, text="ECONOMIE", font=("Georgia", 11, "bold"),
                  fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
-        sep()
  
         self.var_cout_base = tk.StringVar(value="1.0")
         self.var_alpha     = tk.StringVar(value="5.0")
@@ -84,7 +80,6 @@ class LowBidApp(tk.Tk):
         sep()
         tk.Label(left, text="ACTIONS", font=("Georgia", 11, "bold"),
                  fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
-        sep()
  
         for text, cmd, bg, fg in [
             ("> Analyser la manche",  self.analyser, "#1a3a5c",  "#ffffff"),
@@ -95,13 +90,12 @@ class LowBidApp(tk.Tk):
                       font=("Courier New", 10, "bold"), relief="flat", bd=0,
                       padx=10, pady=7, cursor="hand2").pack(fill="x", pady=3)
  
-        # ── Panneau droit ───────────────────────────────────────────
         right = tk.Frame(body, bg="#ffffff", padx=14, pady=14)
         right.grid(row=0, column=1, sticky="nsew")
         right.rowconfigure(1, weight=1)
         right.columnconfigure(0, weight=1)
  
-        tk.Label(right, text="RÉSULTATS", font=("Georgia", 11, "bold"),
+        tk.Label(right, text="RESULTATS", font=("Georgia", 11, "bold"),
                  fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
         tk.Frame(right, bg="#c9a84c", height=1).pack(fill="x", pady=6)
  
@@ -124,7 +118,6 @@ class LowBidApp(tk.Tk):
  
         self.ecrire("Bienvenue sur LowBid.\nChargez un fichier CSV et cliquez sur Analyser.\n", "muted")
  
-    # ── Helpers ──────────────────────────────────────────────────────
     def ecrire(self, texte, tag=""):
         self.txt.config(state="normal")
         self.txt.insert("end", texte, tag) if tag else self.txt.insert("end", texte)
@@ -141,7 +134,6 @@ class LowBidApp(tk.Tk):
         if chemin:
             self.var_fichier.set(chemin)
  
-    # ── Analyser ─────────────────────────────────────────────────────
     def analyser(self):
         try:
             cout_base = float(self.var_cout_base.get())
@@ -152,7 +144,7 @@ class LowBidApp(tk.Tk):
  
         chemin = self.var_fichier.get().strip()
         self.effacer()
-        self.ecrire(f"── {os.path.basename(chemin)} ──\n\n", "titre")
+        self.ecrire(f"Fichier : {os.path.basename(chemin)}\n\n", "titre")
  
         manche = Manche(cout_base, alpha)
         try:
@@ -167,9 +159,8 @@ class LowBidApp(tk.Tk):
  
         self.ecrire(f"{manche.abr.nombre_total_mises()} mises chargées.\n\n", "info")
  
-        self.ecrire("ÉTAT DE L'ENCHÈRE\n", "titre")
+        self.ecrire("ETAT DE L'ENCHERE\n", "titre")
         self.ecrire(f"  {'Prix':>6}  {'Joueurs':>7}  Statut\n", "muted")
-        self.ecrire("  " + "─" * 32 + "\n", "muted")
         noeuds = manche.abr.parcours_infixe()
         for n in (noeuds[:50] if len(noeuds) > 100 else noeuds):
             statut = "UNIQUE" if len(n.joueurs) == 1 else f"{len(n.joueurs)} joueurs"
@@ -178,22 +169,20 @@ class LowBidApp(tk.Tk):
             self.ecrire(f"  … ({len(noeuds) - 50} autres prix)\n", "muted")
  
         data = manche.calculer_recette()
-        self.ecrire(f"\nCOÛTS PAR JOUEUR\n", "titre")
-        self.ecrire(f"  {'Joueur':>14}  Coût (€)\n", "muted")
-        self.ecrire("  " + "─" * 26 + "\n", "muted")
+        self.ecrire(f"\nCOUTS PAR JOUEUR\n", "titre")
+        self.ecrire(f"  {'Joueur':>14}  Cout (e)\n", "muted")
         for joueur, cout in sorted(data["couts_par_joueur"].items()):
             self.ecrire(f"  {joueur:>14}  {cout:.2f}\n")
-        self.ecrire(f"\n  Recette vendeur   : {data['recette_totale']:.2f} €\n", "info")
-        self.ecrire(f"  Coût moyen/joueur : {data['cout_moyen']:.2f} €\n", "info")
+        self.ecrire(f"\nRecette vendeur : {data['recette_totale']:.2f} e\n", "info")
+        self.ecrire(f"Cout moyen/joueur : {data['cout_moyen']:.2f} e\n", "info")
  
         result = manche.determiner_gagnant()
-        self.ecrire(f"\nRÉSULTAT\n", "titre")
+        self.ecrire(f"\nRESULTAT\n", "titre")
         if result["statut"] == "gagnant":
-            self.ecrire(f"  🏆  Gagnant : {result['gagnant']}  —  prix = {result['prix']}\n", "succes")
+            self.ecrire(f"Gagnant : {result['gagnant']}  -  prix = {result['prix']}\n", "succes")
         elif result["statut"] == "aucun_unique":
-            self.ecrire("  ⚠  Aucun prix unique — manche annulée.\n", "erreur")
+            self.ecrire("Aucun prix unique — manche annulée.\n", "erreur")
  
-    # ── Simuler ──────────────────────────────────────────────────────
     def simuler(self):
         try:
             cout_base = float(self.var_cout_base.get())
@@ -203,7 +192,7 @@ class LowBidApp(tk.Tk):
             return
  
         self.effacer()
-        self.ecrire("── Simulation 500 manches ──\n\n", "titre")
+        self.ecrire("Simulation 500 manches\n\n", "titre")
         self.ecrire("Calcul en cours...\n", "muted")
         self.update()
  
@@ -216,8 +205,8 @@ class LowBidApp(tk.Tk):
         recette_moy = sum(sim.recettes_vendeur) / len(sim.recettes_vendeur)
         self.ecrire(f"Paramètres : cout_base={cout_base}, α={alpha}\n", "muted")
         self.ecrire(f"Manches sans gagnant : {sim.nb_manches_sans_gagnant}\n", "muted")
-        self.ecrire(f"Recette vendeur moy  : {recette_moy:.2f} €\n\n", "info")
-        self.ecrire(f"  {'Joueur':>10}  {'Stratégie':>11}  {'Victoires':>9}  {'Taux%':>6}  {'Coût moy':>8}\n", "muted")
+        self.ecrire(f"Recette vendeur moy  : {recette_moy:.2f} e\n\n", "info")
+        self.ecrire(f"  {'Joueur':>10}  {'Stratégie':>11}  {'Victoires':>9}  {'Taux%':>6}  {'Cout moy':>8}\n", "muted")
         self.ecrire("  " + "─" * 52 + "\n", "muted")
         for j in sim.joueurs:
             taux     = 100 * j.victoires / j.total_manches if j.total_manches else 0

@@ -2,7 +2,7 @@ from interface import lancer_interface
 from enchere import Manche
 from simulation import Simulation
 from mode_humain import jouer_mode_humain
-
+from graphique import afficher_graphique
 #defaut
 cout_defaut = 1.0
 alpha = 5.0
@@ -42,6 +42,7 @@ def menu():
     print("3. Lancer la simulation multi-manches (500 manches aléatoires)")
     print("4. Comparer stratégies sur plusieurs valeurs d'α")
     print("5. Mode Humain vs Ordinateur")
+    print("6. Afficher graphique de distribution des prix")
     print("0. Quitter")
     print()
 
@@ -169,8 +170,19 @@ def main():
             nb = int(input("Nombre de manches [5 par défaut] : ").strip() or "5")
             prix_max = int(input("Prix maximum autorisé [20 par défaut] : ").strip() or "20")
             cout= float(input("Cout de base (cout minimum payé dans tous les cas [1 par défaut] : ").strip() or "1")
-            alpha = float(input("Valeur de alpha [5 par défaut] : ").strip() or "5")
-            jouer_mode_humain(nb, prix_max, cout, alpha, nom_humain)
+            nv_alpha = float(input("Valeur de alpha [5 par défaut] : ").strip() or "5")
+            jouer_mode_humain(nb, prix_max, cout, nv_alpha, nom_humain)
+        elif choix == "6":
+            print("\n1. Manche démo")
+            print("3. Stress test")
+            print("0. Fichier personnalisé")
+            c = input("Votre choix : ").strip()
+            cfg = fichiers_csv.get(c) if c in ["1", "3"] else None
+            if c == "0":
+                chemin = input("Chemin : ").strip()
+                cfg = {"chemin": chemin, "format": "simple"}
+            if cfg:
+                afficher_graphique(cfg["chemin"], cfg["format"])
         elif choix == "0":
             print("\nAu revoir !\n")
             break

@@ -1,53 +1,25 @@
-"""
-strategies.py — Stratégies de joueurs pour la simulation LowBid
-
-Chaque stratégie est une fonction :
-    strategie(prix_max, historique) -> int
-Elle retourne le prix choisi par le joueur pour cette manche.
-
-`historique` est une liste des prix gagnants des manches précédentes.
-"""
-
 import random
 import math
 
-
-# ------------------------------------------------------------------ #
-#  STRATÉGIE 1 : Aléatoire pur                                        #
-# ------------------------------------------------------------------ #
-
-def strategie_aleatoire(prix_max: int, historique: list[int]) -> int:
-    """Choisit un prix au hasard dans [0, prix_max]."""
+#toutes les fonctions prennent historique en parametre pour faciliter l'appel dans les autres programmes
+#aleatoire
+def strategie_aleatoire(prix_max, historique):
+    """prix au hasard entre 0 et prix_max"""
     return random.randint(0, prix_max)
 
-
-# ------------------------------------------------------------------ #
-#  STRATÉGIE 2 : Prudente (évite les tout petits prix)               #
-# ------------------------------------------------------------------ #
-
-def strategie_prudente(prix_max: int, historique: list[int]) -> int:
-    """
-    Évite les prix très bas (coûteux à cause de la prime de risque).
-    Choisit uniformément dans [prix_max//4, prix_max//2].
-    """
+#prudent = evite les prix bas
+def strategie_prudente(prix_max, historique):
+    """prix entre prix_max//4 et prix_max//2"""
     borne_inf = max(1, prix_max // 4)
     borne_sup = max(borne_inf + 1, prix_max // 2)
     return random.randint(borne_inf, borne_sup)
 
-
-# ------------------------------------------------------------------ #
-#  STRATÉGIE 3 : Adaptative (suit l'historique des gagnants)         #
-# ------------------------------------------------------------------ #
-
-def strategie_adaptative(prix_max: int, historique: list[int]) -> int:
-    """
-    Si l'historique est riche, choisit autour du prix gagnant moyen
-    avec une légère variation aléatoire (±2).
-    Sinon, revient à la stratégie aléatoire.
-    """
+#adaptive = suit les mises des manches precedents
+def strategie_adaptative(prix_max, historique):
+    """aleatoire mais quand assez d'historique choisit moyenne des prix +-2"""
     if len(historique) < 5:
         return strategie_aleatoire(prix_max, historique)
-    # Moyenne des 10 derniers prix gagnants
+    #moyenne
     recents = [p for p in historique[-10:] if p is not None]
     if not recents:
         return strategie_aleatoire(prix_max, historique)
@@ -56,31 +28,14 @@ def strategie_adaptative(prix_max: int, historique: list[int]) -> int:
     prix = int(round(moyenne)) + variation
     return max(0, min(prix_max, prix))
 
-
-# ------------------------------------------------------------------ #
-#  STRATÉGIE 4 : Agressive (mise sur les très bas prix)              #
-# ------------------------------------------------------------------ #
-
-def strategie_agressive(prix_max: int, historique: list[int]) -> int:
-    """
-    Mise systématiquement sur de très petits prix (0 à 3).
-    Coûte cher à cause de la prime de risque, mais vise les prix bas.
-    """
+#agressive = prix bas
+def strategie_agressive(prix_max, historique):
+    """prix entre 0 et 3"""
     return random.randint(0, min(3, prix_max))
 
-
-# ------------------------------------------------------------------ #
-#  STRATÉGIE 5 : Calculée (compromis coût/unicité)                   #
-# ------------------------------------------------------------------ #
-
-def strategie_calculee(prix_max: int, historique: list[int],
-                        cout_base: float = 1.0, alpha: float = 5.0) -> int:
-    """
-    Cherche un compromis entre prime de risque et chances d'être unique.
-    Utilise une distribution de probabilité pondérée :
-    poids(p) ∝ 1 / cout_mise(p) = 1 / (cout_base + alpha/(p+1))
-    Les prix moins chers sont favorisés, mais pas à l'extrême.
-    """
+#calculee = maths
+def strategie_calculee(prix_max, historique, cout_base=1.0, alpha=5.0):
+    """fait des calculs pour chercher le prix unique plus interessant interessant en cout/bas """
     poids = []
     for p in range(prix_max + 1):
         cout = cout_base + alpha / (p + 1)
@@ -95,15 +50,10 @@ def strategie_calculee(prix_max: int, historique: list[int],
             return p
     return prix_max
 
-
-# ------------------------------------------------------------------ #
-#  REGISTRE DES STRATÉGIES                                            #
-# ------------------------------------------------------------------ #
-
 strategies = {
-    "Aleatoire":   strategie_aleatoire,
-    "Prudente":    strategie_prudente,
-    "Adaptative":  strategie_adaptative,
-    "Agressive":   strategie_agressive,
-    "Calculee":    strategie_calculee,
+    "Aleatoire": strategie_aleatoire,
+    "Prudente": strategie_prudente,
+    "Adaptative": strategie_adaptative,
+    "Agressive": strategie_agressive,
+    "Calculee": strategie_calculee,
 }

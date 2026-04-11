@@ -60,7 +60,7 @@ class LowBidApp(tk.Tk):
                            bg="#ffffff", fg="#1a1a1a", font=("Courier New", 10),
                            activebackground="#ffffff").pack(side="left", padx=4)
  
-        lbl("Num manche (si multi)")
+        lbl("Num manche si multi (-1 merge toutes les manches en une)")
         self.var_manche = tk.StringVar(value="1")
         tk.Entry(left, textvariable=self.var_manche, font=("Courier New", 10),
                  relief="solid", bd=1, width=6).pack(anchor="w", pady=(2, 6))
@@ -149,7 +149,7 @@ class LowBidApp(tk.Tk):
         manche = Manche(cout_base, alpha)
         try:
             if self.var_format.get() == "multi":
-                num = int(self.var_manche.get()) if self.var_manche.get().isdigit() else 1
+                num = int(self.var_manche.get()) if self.var_manche.get().lstrip('-').isdigit() else 1
                 manche.charger_csv_multi_manches(chemin, numero_manche=num)
             else:
                 manche.charger_csv(chemin)
@@ -157,8 +157,7 @@ class LowBidApp(tk.Tk):
             self.ecrire(f"Erreur : {e}\n", "erreur")
             return
  
-        self.ecrire(f"{manche.abr.nombre_total_mises()} mises chargées.\n\n", "info")
- 
+        self.ecrire(f"{manche.abr.nombre_total_mises()} mises chargées\n\n", "info")
         self.ecrire("ETAT DE L'ENCHERE\n", "titre")
         self.ecrire(f"  {'Prix':>6}  {'Joueurs':>7}  Statut\n", "muted")
         noeuds = manche.abr.parcours_infixe()
@@ -169,7 +168,9 @@ class LowBidApp(tk.Tk):
             self.ecrire(f"  … ({len(noeuds) - 50} autres prix)\n", "muted")
  
         data = manche.calculer_recette()
-        self.ecrire(f"\nCOUTS PAR JOUEUR\n", "titre")
+        self.ecrire(f"\nCOUTS PAR JOUEUR\n\n", "titre")
+        self.ecrire(f"Rappel : la formule de calcul du cout de la mise est {cout_base} + {alpha}/(prix+1)\n\n", "info")
+
         self.ecrire(f"  {'Joueur':>14}  Cout (e)\n", "muted")
         for joueur, cout in sorted(data["couts_par_joueur"].items()):
             self.ecrire(f"  {joueur:>14}  {cout:.2f}\n")
@@ -212,7 +213,8 @@ class LowBidApp(tk.Tk):
             taux     = 100 * j.victoires / j.total_manches if j.total_manches else 0
             cout_moy = j.couts_totaux / j.total_manches    if j.total_manches else 0
             self.ecrire(f"  {j.nom:>10}  {j.strategie_nom:>11}  {j.victoires:>9}  {taux:>6.2f}  {cout_moy:>8.2f}\n")
- 
+        self.ecrire(f"Rappel : la formule de calcul du cout de la mise est {cout_base} + {alpha}/(prix+1)\n\n", "info")
+
  
 def lancer_interface():
     LowBidApp().mainloop()

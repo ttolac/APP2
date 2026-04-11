@@ -30,7 +30,22 @@ class Manche:
 
                     if prix >= 0:
                         self.ajouter_mise(joueur, prix)  #prix doit être>= 0
-                    
+
+    def charger_csv_multi_manches(self, chemin, numero_manche= 1):
+        """charger une manche si on a un fichier (manche joueur prix) si numero_manche=-1, charge toutes les manches"""
+        if not os.path.exists(chemin):
+            raise FileNotFoundError(f"Fichier introuvable : {chemin}")
+        with open(chemin, newline='', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            for ligne in reader:
+                if len(ligne) >= 3 and ligne[0].strip() != "manche":
+                    manche = int(ligne[0].strip())
+                    joueur = ligne[1].strip()
+                    prix = int(ligne[2].strip())
+                    if prix >= 0:
+                        if numero_manche == -1 or manche == numero_manche:
+                            self.ajouter_mise(joueur, prix)
+
     def generer_demo(self, nb_joueurs=10, prix_max=20, nb_mises_par_joueur=2):
         """demo aleatoire"""
         for i in range(nb_joueurs):

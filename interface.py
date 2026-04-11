@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
-import sys, os
+import os
 from enchere import Manche
 from simulation import Simulation
 

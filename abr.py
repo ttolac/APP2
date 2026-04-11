@@ -50,7 +50,7 @@ class ABR:
         if not noeuds:
             print("(arbre vide)")
             return
-        print(f"{'Prix':>6} | {'Nb joueurs':>10} | Joueurs") #>6 et >10 servent a l'alignement pour que ca soit joli
+        print(f"  {'Prix':>6} | {'Nb joueurs':>10} | Joueurs") #>6 et >10 servent a l'alignement pour que ca soit joli
         for n in noeuds:
             statut = "UNIQUE" if len(n.joueurs) == 1 else f"{len(n.joueurs)} joueurs"
             print(f"  {n.prix:>6} | {statut:>10} | {', '.join(n.joueurs)}")

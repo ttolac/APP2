@@ -97,7 +97,7 @@ def demo_generation():
     analyser_manche(manche)
 
 
-def analyser_manche(manche: Manche):
+def analyser_manche(manche):
     """analyse complete dune manche chargee"""
     #on utilise le parcours infixe
     manche.afficher_etat()

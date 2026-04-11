@@ -79,7 +79,7 @@ class Simulation:
             print("Aucun joueur enregistré.")
             return
 
-        for _ in range(self.nb_manches):
+        for i in range(self.nb_manches):
             self._jouer_une_manche()
 
     def _jouer_une_manche(self) -> None:

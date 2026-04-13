@@ -14,7 +14,7 @@ class Manche:
         self.cout_base = cout_base
         self.alpha = alpha
         self.abr = ABR()
-        self.mises: list[tuple[str, int]] = []   # [(joueur, prix), ...]
+        self.mises = []
 
 
     def charger_csv(self, chemin):

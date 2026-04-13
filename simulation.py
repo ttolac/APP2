@@ -14,7 +14,7 @@ class JoueurIA:
         self.total_manches = 0
         self.gains_totaux = 0.0 
         self.couts_totaux = 0.0
-        self.historique_gagnants: list[int] = []
+        self.historique_gagnants = []
 
     def choisir_prix(self, prix_max):
         """On calcule la mise pour chaque strat (calculee a besoin de 2 parametres en plus)"""
@@ -38,8 +38,8 @@ class Simulation:
         self.prix_max = prix_max
         self.cout_base = cout_base
         self.alpha = alpha
-        self.joueurs: list[JoueurIA] = []
-        self.recettes_vendeur: list[float] = []
+        self.joueurs = []
+        self.recettes_vendeur = []
         self.nb_manches_sans_gagnant = 0
 
     def ajouter_joueur(self, nom, strategie_nom):

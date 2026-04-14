@@ -100,7 +100,7 @@ def jouer_mode_humain(nb_manches=5, prix_max=20, cout_base=1.0, alpha=5.0, nom_h
 
         #conseils
         conseil_strategie(prix_humain, prix_gagnant, historique_gagnants,cout_base, alpha)
-
+        afficher_resume_humain(nom_humain, victoires_humain, cout_total_humain,nb_manches, stats_bots)
 def conseil_strategie(prix_humain, prix_gagnant,historique,cout_base, alpha):
     """petits conseils strategiques"""
     print()
@@ -121,3 +121,11 @@ def conseil_strategie(prix_humain, prix_gagnant,historique,cout_base, alpha):
             print(" -> votre prix est dans la zone habituelle des gagnants")
     else:
         print("Pas encore assez de données pour conseiller")
+
+def afficher_resume_humain(nom, victoires, cout_total,nb_manches, stats_bots):
+    print("RESUME FINAL")
+    print(f"{nom} : {victoires}/{nb_manches} manches gagnées ({100*victoires/nb_manches:.1f}%) / Coût total : {cout_total:.2f} e")
+    print()
+    print(f"  {'Bot':>15} | {'Victoires':>9} | {'Coût total':>10}")
+    for nom_bot, s in stats_bots.items():
+        print(f"  {nom_bot:>15} | {s['victoires']:>9} | {s['cout']:>10.2f} e")

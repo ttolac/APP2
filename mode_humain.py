@@ -23,10 +23,10 @@ def jouer_mode_humain(nb_manches=5, prix_max=20, cout_base=1.0, alpha=5.0, nom_h
     #stats humain
     victoires_humain = 0
     cout_total_humain = 0.0
-    historique_gagnants: list[int] = []
+    historique_gagnants = []
 
     #stats bots
-    stats_bots = {nom: {"victoires": 0, "cout": 0.0} for nom, _ in bots}
+    stats_bots = {nom: {"victoires": 0, "cout": 0.0} for nom, i in bots}
 
     for manche_num in range(1, nb_manches + 1):
         print(f"{'-'*50}")
@@ -101,10 +101,6 @@ def jouer_mode_humain(nb_manches=5, prix_max=20, cout_base=1.0, alpha=5.0, nom_h
         #conseils
         conseil_strategie(prix_humain, prix_gagnant, historique_gagnants,cout_base, alpha)
 
-    # Résumé final
-    afficher_resume_humain(nom_humain, victoires_humain, cout_total_humain,nb_manches, stats_bots)
-
-
 def conseil_strategie(prix_humain, prix_gagnant,historique,cout_base, alpha):
     """petits conseils strategiques"""
     print()
@@ -118,31 +114,10 @@ def conseil_strategie(prix_humain, prix_gagnant,historique,cout_base, alpha):
         cout_moy = cout_mise(int(moy), cout_base, alpha)
         print(f"Coût mise sur 0 : {cout_0:.2f} e / Coût mise sur ~{int(moy)} : {cout_moy:.2f} e")
         if prix_humain < moy / 2:
-            print(" -> Vous jouez très bas : risque de collision ET coût élevé")
+            print(" -> vous jouez très bas : risque de collision ET coût élevé")
         elif prix_humain > moy * 2:
-            print(" -> Vous jouez très haut : peu de concurrence mais prix unique rare")
+            print(" -> vous jouez très haut : peu de concurrence mais prix unique rare")
         else:
-            print(" -> Votre prix est dans la zone habituelle des gagnants")
+            print(" -> votre prix est dans la zone habituelle des gagnants")
     else:
         print("Pas encore assez de données pour conseiller")
-
-
-def afficher_resume_humain(nom, victoires, cout_total,nb_manches, stats_bots):
-    print("\n" + "-" * 60)
-    print("  RÉSUMÉ FINAL")
-    print(f"{nom} : {victoires}/{nb_manches} manches gagnées ({100*victoires/nb_manches:.1f}%) / Coût total : {cout_total:.2f} e")
-    print()
-    print(f"  {'Bot':>15} | {'Victoires':>9} | {'Coût total':>10}")
-    for nom_bot, s in stats_bots.items():
-        print(f"  {nom_bot:>15} | {s['victoires']:>9} | {s['cout']:>10.2f} e")
-
-    print()
-    print("Réflexion sur la stratégie gagnante")
-    print(" -Le prix 0 semble attrayant, mais la prime de risque peut le rendre très cher")
-    print(" -La vraie valeur est dans l'unicité : un prix légèrement au-dessus")
-    print("    de la zone populaire a plus de chances d'être unique")
-    print(" -La stratégie 'Calculée' pondère coût et unicité pour maximiser")
-    print("    l'espérance de gain nette.")
-    print(" -La stratégie 'Adaptative' apprend de l'historique, mais converge")
-    print("    vers la même zone que les autres -> le système n'a pas de prix 'stable'")
-    print("    unique")

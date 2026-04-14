@@ -3,7 +3,7 @@ class Noeud:
         self.prix = prix
         self.joueurs = [joueur]   #plusieurs joueurs possibles pour un meme prix
         self.gauche = None
-        self.droite = None
+        self.droite = None 
 
 
 class ABR:

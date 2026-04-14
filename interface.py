@@ -182,7 +182,7 @@ class LowBidApp(tk.Tk):
         if result["statut"] == "gagnant":
             self.ecrire(f"Gagnant : {result['gagnant']}  -  prix = {result['prix']}\n", "succes")
         elif result["statut"] == "aucun_unique":
-            self.ecrire("Aucun prix unique — manche annulée.\n", "erreur")
+            self.ecrire("Aucun prix unique - manche annulée.\n", "erreur")
  
     def simuler(self):
         try:

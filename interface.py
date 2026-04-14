@@ -14,10 +14,8 @@ class LowBidApp(tk.Tk):
         #entete
         hdr = tk.Frame(self, bg="#1a3a5c", pady=14)
         hdr.pack(fill="x")
-        tk.Label(hdr, text="⚖  LOWBID", font=("Georgia", 20, "bold"), fg="#c9a84c",
-                 bg="#1a3a5c").pack(side="left", padx=24)
-        tk.Label(hdr, text="Qui perd gagne !", font=("Georgia", 11, "italic"),
-                 fg="#aabbcc", bg="#1a3a5c").pack(side="left")
+        tk.Label(hdr, text="⚖  LOWBID", font=("Georgia", 20, "bold"), fg="#c9a84c", bg="#1a3a5c").pack(side="left", padx=24)
+        tk.Label(hdr, text="Qui perd gagne !", font=("Georgia", 11, "italic"),fg="#aabbcc", bg="#1a3a5c").pack(side="left")
  
         #corps
         body = tk.Frame(self, bg="#f5f4f0")
@@ -26,77 +24,61 @@ class LowBidApp(tk.Tk):
         body.columnconfigure(1, weight=2)
         body.rowconfigure(0, weight=1)
  
-        left = tk.Frame(body, bg="#ffffff", padx=14, pady=14,
-                        relief="flat", bd=1)
+        left = tk.Frame(body, bg="#ffffff", padx=14, pady=14,relief="flat", bd=1)
         left.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
  
         def sep():
             tk.Frame(left, bg="#c9a84c", height=1).pack(fill="x", pady=6)
  
         def lbl(text, fg="#888888"):
-            tk.Label(left, text=text, font=("Courier New", 10), fg=fg,
-                     bg="#ffffff").pack(anchor="w", pady=(6, 0))
+            tk.Label(left, text=text, font=("Courier New", 10), fg=fg, bg="#ffffff").pack(anchor="w", pady=(6, 0))
  
-        tk.Label(left, text="PARAMETRES", font=("Georgia", 11, "bold"),
-                 fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
+        tk.Label(left, text="PARAMETRES", font=("Georgia", 11, "bold"),fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
         sep()
  
         lbl("Fichier CSV")
         fr = tk.Frame(left, bg="#ffffff")
         fr.pack(fill="x", pady=(2, 6))
         self.var_fichier = tk.StringVar(value="lowbid_manche_demo.csv")
-        tk.Entry(fr, textvariable=self.var_fichier, font=("Courier New", 10),
-                 relief="solid", bd=1).pack(side="left", fill="x", expand=True)
-        tk.Button(fr, text="…", command=self.parcourir, font=("Courier New", 10, "bold"),
-                  bg="#f5f4f0", fg="#1a3a5c", relief="flat", bd=1,
-                  cursor="hand2").pack(side="left", padx=(4, 0))
+        tk.Entry(fr, textvariable=self.var_fichier, font=("Courier New", 10),relief="solid", bd=1).pack(side="left", fill="x", expand=True)
+        tk.Button(fr, text="…", command=self.parcourir, font=("Courier New", 10, "bold"),bg="#f5f4f0", fg="#1a3a5c", relief="flat", bd=1,cursor="hand2").pack(side="left", padx=(4, 0))
  
         lbl("Format")
         self.var_format = tk.StringVar(value="simple")
         fr2 = tk.Frame(left, bg="#ffffff")
         fr2.pack(fill="x", pady=(2, 6))
         for val, txt in [("simple", "joueur,prix"), ("multi", "manche,joueur,prix")]:
-            tk.Radiobutton(fr2, text=txt, variable=self.var_format, value=val,
-                           bg="#ffffff", fg="#1a1a1a", font=("Courier New", 10),
-                           activebackground="#ffffff").pack(side="left", padx=4)
+            tk.Radiobutton(fr2, text=txt, variable=self.var_format, value=val,bg="#ffffff", fg="#1a1a1a", font=("Courier New", 10),activebackground="#ffffff").pack(side="left", padx=4)
  
         lbl("Num manche si multi (-1 merge toutes les manches en une)")
         self.var_manche = tk.StringVar(value="1")
-        tk.Entry(left, textvariable=self.var_manche, font=("Courier New", 10),
-                 relief="solid", bd=1, width=6).pack(anchor="w", pady=(2, 6))
+        tk.Entry(left, textvariable=self.var_manche, font=("Courier New", 10),relief="solid", bd=1, width=6).pack(anchor="w", pady=(2, 6))
  
         sep()
-        tk.Label(left, text="ECONOMIE", font=("Georgia", 11, "bold"),
-                 fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
+        tk.Label(left, text="ECONOMIE", font=("Georgia", 11, "bold"),fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
  
         self.var_cout_base = tk.StringVar(value="1.0")
         self.var_alpha     = tk.StringVar(value="5.0")
-        for libelle, var in [("cout_base (euros)", self.var_cout_base),
-                              ("α (prime risque)", self.var_alpha)]:
+        for libelle, var in [("cout_base (euros)", self.var_cout_base),("α (prime risque)", self.var_alpha)]:
             lbl(libelle)
-            tk.Entry(left, textvariable=var, font=("Courier New", 10),
-                     relief="solid", bd=1, width=10).pack(anchor="w", pady=(2, 6))
+            tk.Entry(left, textvariable=var, font=("Courier New", 10),relief="solid", bd=1, width=10).pack(anchor="w", pady=(2, 6))
  
         sep()
-        tk.Label(left, text="ACTIONS", font=("Georgia", 11, "bold"),
-                 fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
+        tk.Label(left, text="ACTIONS", font=("Georgia", 11, "bold"),fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
  
         for text, cmd, bg, fg in [
             ("> Analyser la manche",  self.analyser, "#1a3a5c",  "#ffffff"),
             ("> Simuler 500 manches", self.simuler,  "#c9a84c", "#1a3a5c"),
             ("X Effacer",             self.effacer,  "#f5f4f0",      "#b03030"),
         ]:
-            tk.Button(left, text=text, command=cmd, bg=bg, fg=fg,
-                      font=("Courier New", 10, "bold"), relief="flat", bd=0,
-                      padx=10, pady=7, cursor="hand2").pack(fill="x", pady=3)
+            tk.Button(left, text=text, command=cmd, bg=bg, fg=fg,font=("Courier New", 10, "bold"), relief="flat", bd=0, padx=10, pady=7, cursor="hand2").pack(fill="x", pady=3)
  
         right = tk.Frame(body, bg="#ffffff", padx=14, pady=14)
         right.grid(row=0, column=1, sticky="nsew")
         right.rowconfigure(1, weight=1)
         right.columnconfigure(0, weight=1)
  
-        tk.Label(right, text="RESULTATS", font=("Georgia", 11, "bold"),
-                 fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
+        tk.Label(right, text="RESULTATS", font=("Georgia", 11, "bold"),fg="#1a3a5c", bg="#ffffff").pack(anchor="w")
         tk.Frame(right, bg="#c9a84c", height=1).pack(fill="x", pady=6)
  
         fr3 = tk.Frame(right, bg="#ffffff")
@@ -104,9 +86,7 @@ class LowBidApp(tk.Tk):
         scroll = tk.Scrollbar(fr3)
         scroll.pack(side="right", fill="y")
  
-        self.txt = tk.Text(fr3, bg="#ffffff", fg="#1a1a1a", font=("Courier New", 10),
-                           relief="flat", bd=0, wrap="word", state="disabled",
-                           yscrollcommand=scroll.set, padx=8, pady=6, spacing1=2)
+        self.txt = tk.Text(fr3, bg="#ffffff", fg="#1a1a1a", font=("Courier New", 10),relief="flat", bd=0, wrap="word", state="disabled",yscrollcommand=scroll.set, padx=8, pady=6, spacing1=2)
         self.txt.pack(fill="both", expand=True)
         scroll.config(command=self.txt.yview)
  
@@ -187,7 +167,7 @@ class LowBidApp(tk.Tk):
     def simuler(self):
         try:
             cout_base = float(self.var_cout_base.get())
-            alpha     = float(self.var_alpha.get())
+            alpha = float(self.var_alpha.get())
         except ValueError:
             messagebox.showerror("Erreur", "cout_base et α doivent être des nombres.")
             return
@@ -198,8 +178,7 @@ class LowBidApp(tk.Tk):
         self.update()
  
         sim = Simulation(nb_manches=500, prix_max=60, cout_base=cout_base, alpha=alpha)
-        for nom, strat in [("Alice","Aleatoire"), ("Bob","Prudente"),
-                            ("Charlie","Adaptative"), ("Diana","Agressive"), ("Eve","Calculee")]:
+        for nom, strat in [("Alice","Aleatoire"), ("Bob","Prudente"), ("Charlie","Adaptative"), ("Diana","Agressive"), ("Eve","Calculee")]:
             sim.ajouter_joueur(nom, strat)
         sim.lancer()
  
